@@ -7,6 +7,7 @@ return todos
 }
 
 const TodosPage=async()=>{
+    await new Promise((resolve)=> setTimeout(()=> resolve(),2000))
     const todos=await getData();
     return(
         <div>
