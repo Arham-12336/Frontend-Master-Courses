@@ -3,7 +3,7 @@ import db from '@/utils/db'
 
 const getData=async()=>{
 const todos=await db.todo.findMany({});
-return todos;
+return todos
 }
 
 const TodosPage=async()=>{

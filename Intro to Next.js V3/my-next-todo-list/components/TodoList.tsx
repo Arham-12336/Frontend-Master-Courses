@@ -10,4 +10,5 @@ const TodoList=({todos})=>{
         </div>
     )
 };
+
 export default TodoList;
