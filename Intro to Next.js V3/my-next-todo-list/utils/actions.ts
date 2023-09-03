@@ -9,7 +9,7 @@ await db.todo.update({
         completed:true,
     },
 })
-revalidatePath('/todos')
+revalidatePath('/todos');
 };
 
 export const newTodo=async(formData)=>{
