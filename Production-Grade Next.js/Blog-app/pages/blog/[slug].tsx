@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+//@ts-ignore
 import hydrate from 'next-mdx-remote/hydrate'
 import matter from 'gray-matter'
 import { majorScale, Pane, Heading, Spinner } from 'evergreen-ui'
