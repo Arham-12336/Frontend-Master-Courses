@@ -10,6 +10,7 @@ import Container from '../../components/container'
 import HomeNav from '../../components/homeNav'
 import fs from 'fs';
 import path from 'path'
+import { posts } from '../../content'
 
 const BlogPost: FC<Post> = ({ source, frontMatter }) => {
   const content = hydrate(source)
@@ -62,8 +63,28 @@ export function getStaticPaths(){
     paths:slugs.map(s=>
       {
         params:{slug:s.slug}
-      })
+      }),
+      fallback:true  //if you go on a blog that doesnt exist you will get a 404 error through fallback
   }
+}
+
+export function getStaticProps({params})
+{
+  let post;
+  try{
+    const filesPath =path.join(process.cwd(),'posts',params.slug + '.mdx');
+    post=fs.readFileSync(filesPath,'utf-8')
+
+  }
+  catch{
+    const cmspost = posts.published.map((p)=>{
+      const {data}=matter(p)
+      return data
+    })
+    post = cmspost.find((p)=>p.slug === params.slug)
+  }
+  
+
 }
 
 /**
