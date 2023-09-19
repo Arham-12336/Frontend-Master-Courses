@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
-//@ts-ignore
-import hydrate from 'next-mdx-remote/hydrate'
+import hydrate from 'next-mdx-remote'
 import matter from 'gray-matter'
 import { majorScale, Pane, Heading, Spinner } from 'evergreen-ui'
 import Head from 'next/head'
@@ -11,10 +10,11 @@ import HomeNav from '../../components/homeNav'
 import fs from 'fs'
 import path from 'path'
 import { posts } from '../../content'
-import { renderToString } from 'next-mdx-remote/render-to-string'
+import { serialize } from 'next-mdx-remote/serialize'
+import { MDXRemote } from 'next-mdx-remote'
 
 const BlogPost: FC<Post> = ({ source, frontMatter }) => {
-  const content = hydrate(source)
+  ;<MDXRemote {...source} />
   const router = useRouter()
 
   if (router.isFallback) {
@@ -83,7 +83,7 @@ export async function getStaticProps({ params }) {
     const match = cmspost.find((p) => p.slug === params.slug)
   }
   const { data } = matter(post)
-  const mdxSource = await renderToString(post, { scope: data })
+  const mdxSource = await serialize(post, { scope: data })
 
   return {
     props: {
