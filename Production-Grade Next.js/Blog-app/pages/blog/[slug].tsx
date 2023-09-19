@@ -8,9 +8,10 @@ import { useRouter } from 'next/router'
 import { Post } from '../../types'
 import Container from '../../components/container'
 import HomeNav from '../../components/homeNav'
-import fs from 'fs';
+import fs from 'fs'
 import path from 'path'
 import { posts } from '../../content'
+import { renderToString } from 'next-mdx-remote/render-to-string'
 
 const BlogPost: FC<Post> = ({ source, frontMatter }) => {
   const content = hydrate(source)
@@ -49,42 +50,47 @@ BlogPost.defaultProps = {
   frontMatter: { title: 'default title', summary: 'summary', publishedOn: '' },
 }
 
-export function getStaticPaths(){
-  const postPath =path.join(process.cwd(),'posts');
-  const filenames=fs.readdirSync(postPath)
-  const slugs=filenames.map(name=>{
-    const filepath=path.join(postPath,name)
-    const file=fs.readFileSync(filepath,'utf-8')
-    const {data}=matter(file)
+export function getStaticPaths() {
+  const postPath = path.join(process.cwd(), 'posts')
+  const filenames = fs.readdirSync(postPath)
+  const slugs = filenames.map((name) => {
+    const filepath = path.join(postPath, name)
+    const file = fs.readFileSync(filepath, 'utf-8')
+    const { data } = matter(file)
     return data
   })
 
-  return{
-    paths:slugs.map(s=>
-      {
-        params:{slug:s.slug}
-      }),
-      fallback:true  //if you go on a blog that doesnt exist you will get a 404 error through fallback
+  return {
+    paths: slugs.map((s) => {
+      params: {
+        slug: s.slug
+      }
+    }),
+    fallback: true, //if you go on a blog that doesnt exist you will get a 404 error through fallback
   }
 }
 
-export function getStaticProps({params})
-{
-  let post;
-  try{
-    const filesPath =path.join(process.cwd(),'posts',params.slug + '.mdx');
-    post=fs.readFileSync(filesPath,'utf-8')
-
-  }
-  catch{
-    const cmspost = posts.published.map((p)=>{
-      const {data}=matter(p)
+export async function getStaticProps({ params }) {
+  let post
+  try {
+    const filesPath = path.join(process.cwd(), 'posts', params.slug + '.mdx')
+    post = fs.readFileSync(filesPath, 'utf-8')
+  } catch {
+    const cmspost = posts.published.map((p) => {
+      const { content, data } = matter(p)
       return data
     })
-    post = cmspost.find((p)=>p.slug === params.slug)
+    const match = cmspost.find((p) => p.slug === params.slug)
   }
-  
+  const { data } = matter(post)
+  const mdxSource = await renderToString(post, { scope: data })
 
+  return {
+    props: {
+      source: mdxSource,
+      frontMatter: data,
+    },
+  }
 }
 
 /**
