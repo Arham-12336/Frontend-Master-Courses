@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -10,9 +11,11 @@ export default function Home() {
           you have to do is be honesy
         </p>
         <div>
-          <button className="bg-blue-400 px-4 py-4 rounded-lg text-xl">
-            Get started
-          </button>
+          <Link href="/journal">
+            <button className="bg-blue-400 px-4 py-4 rounded-lg text-xl">
+              Get started
+            </button>
+          </Link>
         </div>
       </div>
     </div>
