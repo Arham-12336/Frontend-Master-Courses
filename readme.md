@@ -19,13 +19,9 @@ This repository serves as a comprehensive resource for Frontend Master course al
 The repository is structured as follows:
 
 ├── course1
-│ ├── project1
-│ ├── project2
-│ ├── ...
+│ ├── project
 ├── course2
-│ ├── project1
-│ ├── project2
-│ ├── ...
+│ ├── project
 ├── ...
 └── README.md
 
