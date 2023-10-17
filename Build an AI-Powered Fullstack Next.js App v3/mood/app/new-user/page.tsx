@@ -4,13 +4,14 @@ import { redirect } from "next/navigation";
 
 const createNewUser = async () => {
   const user = await currentUser();
-  const match = await prisma.user.findMany({
+  console.log("User : ", user);
+  const match = await prisma.user.findUnique({
     where: {
       clerkId: user.id as string,
     },
   });
   if (!match) {
-    const newUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         clerkId: user.id,
         email: user?.emailAddresses[0].emailAddress,
