@@ -5,9 +5,10 @@ import { prisma } from "@/utils/db";
 
 const getEntries = async () => {
   const user = await getUserByClerkID();
+  console.log("user in journal", user);
   const entries = await prisma.journalEntry.findMany({
     where: {
-      userId: user,
+      userId: user.id,
     },
     orderBy: {
       createdAt: "desc",
