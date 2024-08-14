@@ -4,16 +4,18 @@ import { prisma } from "@/utils/db";
 
 const getEnrty = async (id: any) => {
   const user = await getUserByClerkID();
-  const entry = await prisma.journalEntry.findUnique({
-    where: {
-      userId_id: {
-        userId: user.id,
-        id,
+  if (user?.id) {
+    const entry = await prisma.journalEntry.findUnique({
+      where: {
+        userId_id: {
+          userId: user.id,
+          id,
+        },
       },
-    },
-  });
+    });
 
-  return entry;
+    return entry;
+  }
 };
 
 const EntryPage = async ({ params }: any) => {

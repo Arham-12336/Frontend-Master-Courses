@@ -5,12 +5,16 @@ import { NextResponse } from "next/server";
 
 export const POST = async () => {
   const user = await getUserByClerkID();
-  const entry = await prisma.journalEntry.create({
-    data: {
-      userId: user.id,
-      content: "Write about your day!",
-    },
-  });
+  let entry;
+  if (user?.id) {
+    entry = await prisma.journalEntry.create({
+      data: {
+        userId: user.id,
+        content: "Write about your day!",
+      },
+    });
+  }
+
   revalidatePath("/journal");
   return NextResponse.json({ data: entry });
 };
