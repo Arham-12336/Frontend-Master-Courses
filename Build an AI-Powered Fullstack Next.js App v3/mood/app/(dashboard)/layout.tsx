@@ -1,6 +1,6 @@
 import { UserButton } from "@clerk/nextjs";
 
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = ({ children }: any) => {
   return (
     <div className="h-screen w-screen relative bg-gradient-to-r from-purple-800 to-indigo-900">
       <aside className="absolute w-[250px] top-0 left-0 h-full bg-gradient-to-b from-purple-900 to-indigo-800 border-r border-white/30 shadow-lg">
